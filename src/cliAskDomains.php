@@ -11,7 +11,7 @@ if($argc >= 2)
 	{
 		case "-g" :
 			//You MUST do this the first time
-            $myAccess = '{"accessRules": [{"method": "GET","path": "/*"}]}';
+            $myAccess = '{"accessRules": [{"method": "GET","path": "/*"},{"method": "POST","path": "/*"},{"method": "PUT","path": "/*"},{"method": "DELETE","path": "/*"}]}';
 			OvhApi::getCredential($AK, OvhApi::$roots["ovh-eu"], $myAccess);
 		break;
 
