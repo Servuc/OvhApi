@@ -2,11 +2,14 @@
 session_start();
 include "OvhApi.php";
 
+//Your app secret keys ;)
 $AK = "***********************";
 $AS = "***********************";
 
+//Enough parameters
 if($argc >= 2)
 {
+	//First is used to choose what we will done
 	switch ($argv[1])
 	{
 		case "-g" :
@@ -16,8 +19,8 @@ if($argc >= 2)
 		break;
 
 		case "-d" :
-        	$mVarOvh = new OvhApi(OvhApi::$roots["ovh-eu"], $AK, $AS);
-			print_r($mVarOvh->get("/domain"));
+        	$myOvh = new OvhApi(OvhApi::$roots["ovh-eu"], $AK, $AS);
+			print_r($myOvh->get("/domain"));
 		break;
 	}
 

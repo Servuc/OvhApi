@@ -19,24 +19,27 @@ class OvhApi
     protected $timeDrift = 0;
     protected $cliVersion;
 
-    /**
-     * constructor
-     * @param $_root API service URL (give in $roots array)
-     * @param $_ak Your app key
-     * @param $_as Your app secret key
-     * @param $_cliVersion Set it to false if you're in a web page
-     */
+	/**
+	 * constructor
+	 * @param string $_root API service URL (give in $roots array)
+	 * @param string $_ak Your app key
+	 * @param string $_as Your app secret key
+	 * @param boolean $_cliVersion Set it to false if you're in a web page
+	 * @throws Exception In web version, you should have session_start() !
+	 */
     public function __construct($_root, $_ak, $_as, $_cliVersion = true)
     {
     	if($_cliVersion && is_file("CK"))
     	{
-			$myFichier = fopen('CK', 'r+');
-			$this->CK = substr(fgets($myFichier), 0, -1);
-			fclose($myFichier);
+			$myFile = fopen('CK', 'r+');
+			$this->CK = substr(fgets($myFile), 0, -1);
+			fclose($myFile);
 		}
         else {
             if( ! isset($_SESSION))
-                throw new Exception("Add session_start() on your script !");
+			{
+				throw new Exception("Add session_start() on your script !");
+			}
 
             $this->CK = $_SESSION["ck"];
         }
@@ -120,12 +123,14 @@ class OvhApi
         return $this->call("DELETE", $url);
     }
 
-    /**
-     * Permit you to ask credential to allow ask on api
-     * @param $_ak Your application key
-     * @param $_root API service URL (give in $roots array)
-     * @param $_cliVersion Set it to false if you're in a web page. Think to add session_start();
-     */
+	/**
+	 * Permit you to ask credential to allow ask on api
+	 * @param string $_ak Your application key
+	 * @param string $_root API service URL (give in $roots array)
+	 * @param string $_access Choose type of access, like : '{"accessRules": [{"method": "GET","path": "/*"},{"method": "POST","path": "/*"}]}' for example
+	 * @param boolean $_cliVersion Set it to false if you're in a web page. Think to add session_start();
+	 * @throws Exception
+	 */
     public static function getCredential($_ak, $_root, $_access, $_cliVersion = true)
     {
     	$curl = curl_init($_root . "/auth/credential");
@@ -147,7 +152,9 @@ class OvhApi
     	   system("echo " . preg_replace("/^.*(\"consumerKey\":\")([A-Za-z0-9]+).*$/" , "$2" , $result) . " > CK");
         else  {
             if( ! isset($_SESSION))
-                throw new Exception("Add session_start() on your script !");
+			{
+				throw new Exception("Add session_start() on your script !");
+			}
 
             $_SESSION["ck"] = preg_replace("/^.*(\"consumerKey\":\")([A-Za-z0-9]+).*$/" , "$2" , $result);
         }
