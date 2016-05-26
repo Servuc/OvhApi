@@ -1,0 +1,7 @@
+{
+  "name": "Servuc/OvhApi",
+  "description": "Yet another wrapper PHP to use OVH API easily !",
+  "require": {
+    "php": "^5.5 || ^7.0"
+  }
+}
