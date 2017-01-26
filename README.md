@@ -7,7 +7,7 @@ You can get your app key [here :)](https://eu.api.ovh.com/createApp/).
 
 ## Setup project
 
-Just check if you have `php5-cli` and `php5-curl` on your computer :
+Just check if you have `php5-cli` and `php5-curl` on your computer for CLI usage :
 
 	sudo apt-get install php5-cli php5-curl
 

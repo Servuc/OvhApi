@@ -12,11 +12,31 @@ class OvhApi
        'soyoustart-ca' => 'https://ca.api.soyoustart.com/1.0',
        'runabove-ca' => 'https://api.runabove.com/1.0');
 
+    /**
+     * @var string Application Key
+     */
     protected $AK;
+
+    /**
+     * @var string Application Secret key
+     */
     protected $AS;
+
+    /**
+     * @var string Application credential key
+     */
     protected $CK;
+
     protected $serviceName;
+
+    /**
+     * @var int Timing value used for bad call preventing
+     */
     protected $timeDrift = 0;
+
+    /**
+     * @var bool Indicate if used of this code is done in a web page or in CLI
+     */
     protected $cliVersion;
 
 	/**
@@ -27,7 +47,7 @@ class OvhApi
 	 * @param boolean $_cliVersion Set it to false if you're in a web page
 	 * @throws Exception In web version, you should have session_start() !
 	 */
-    public function __construct($_root, $_ak, $_as, $_cliVersion = true)
+    public function __construct(string $_root, string $_ak, string $_as, bool $_cliVersion = true)
     {
     	if($_cliVersion && is_file("CK"))
     	{
@@ -61,11 +81,12 @@ class OvhApi
 
     /**
      * Call the api
-     * @param $_method GET POST DELETE or UPDATE
-     * @param $_url The call url wanted
-     * @param $_body Parameters
+     * @param string $_method GET POST DELETE or UPDATE
+     * @param string $_url The call url wanted
+     * @param array $_body Parameters as keys values array
+     * @return array
      */
-    public function call($_method, $_url, $_body = "")
+    public function call(string $_method, string $_url, array $_body = []) : array
     {
         $myUrl = $this->ROOT . $_url;
         if($_body != "")
@@ -103,22 +124,44 @@ class OvhApi
         return json_decode($result, true);
     }
 
-    public function get($url)
+    /**
+     * Call GET method
+     * @param string $url
+     * @return array
+     */
+    public function get(string $url) : array
     {
         return $this->call("GET", $url);
     }
 
-    public function put($url, $body)
+    /**
+     * Call PUT method
+     * @param string $url
+     * @param array $body Keys Values array
+     * @return array
+     */
+    public function put(string $url, array $body = []) : array
     {
         return $this->call("PUT", $url, $body);
     }
 
-    public function post($url, $body)
+    /**
+     * Call POST method
+     * @param string $url
+     * @param array $body Keys Values array
+     * @return array
+     */
+    public function post(string $url, array $body = []) : array
     {
         return $this->call("POST", $url, $body);
     }
 
-    public function delete($url)
+    /**
+     * Call DELETE method
+     * @param string $url
+     * @return array
+     */
+    public function delete(string $url) : array
     {
         return $this->call("DELETE", $url);
     }
@@ -131,7 +174,7 @@ class OvhApi
 	 * @param boolean $_cliVersion Set it to false if you're in a web page. Think to add session_start();
 	 * @throws Exception
 	 */
-    public static function getCredential($_ak, $_root, $_access, $_cliVersion = true)
+    public static function getCredential(string $_ak, string $_root, string $_access, bool $_cliVersion = true)
     {
     	$curl = curl_init($_root . "/auth/credential");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
